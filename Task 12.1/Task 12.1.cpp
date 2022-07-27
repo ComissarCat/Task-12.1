@@ -12,8 +12,9 @@ using namespace experimental::filesystem;
 void task_1(string file_name_1, string file_name_2);
 void task_2(string file_name);
 void task_3(string file_name);
-void task_4();
+void task_4(string file_name);
 void create_file(string file_name);
+void menu(string file_name_1, string file_name_2);
 
 int main()
 {
@@ -21,11 +22,9 @@ int main()
 
     string file_name_1 = "text_file_1.txt";
     string file_name_2 = "text_file_2.txt";
-    path file = file_name_1;    
+    path file = file_name_1;
     if (not exists(file)) create_file(file_name_1);
-    task_1(file_name_1, file_name_2);
-    task_2(file_name_1);
-    task_3(file_name_1);
+    menu(file_name_1, file_name_2);
 
     return 0;
 }
@@ -67,6 +66,9 @@ void task_1(string file_name_1, string file_name_2)
     }
     file_1.close();
     file_2.close();
+    path file = file_name_2;
+    if (exists(file)) cout << "Копия файла без последней строки успешно создана\n\n";
+    else cout << "Ошибка\n\n";
 }
 
 void task_2(string file_name)
@@ -105,4 +107,67 @@ void task_3(string file_name)
     }
     cout << target_word << " встречается в файле " << number_of_words_if_file << " раз.\n\n";
     file.close();
+}
+
+void task_4(string file_name)
+{
+    ifstream ifile;
+    string target_word, new_word, temp;
+    int number_of_words_if_file = 0, number_of_strings = 0;
+    ifile.open(file_name);
+    cout << "Введите искомое слово: ";
+    getline(cin, target_word);
+    cout << "Введите слово для замены: ";
+    getline(cin, new_word);    
+    temp = "";
+    while (ifile)
+    {
+        string bufer;
+        getline(ifile, bufer, '\n');
+        if (!ifile) break;        
+        size_t position = 0;
+        while (position != string::npos)
+        {
+            size_t position_start = position;
+            position = bufer.find(target_word, position);
+            if (position != string::npos)
+            {   
+                number_of_words_if_file++;
+                temp += bufer.substr(position_start, position - position_start);
+                temp += new_word;
+                position += new_word.size();
+            }
+            else temp += bufer.substr(position_start, position - position_start);
+        }
+        temp += "\n";
+    }
+    ifile.close();
+    ofstream ofile(file_name);
+    ofile << temp.substr(0, temp.size());
+    ofile.close();
+    cout << "Готово. Произведено замен " << number_of_words_if_file << "\n\n";
+}
+
+void menu(string file_name_1, string file_name_2)
+{
+    int task = 0;
+    do
+    {
+        do
+        {
+            cout << "Введите номер задачи, 0 - выход: ";
+            (cin >> task).get();
+        } while (task < 0 or task > 4);
+        switch (task)
+        {
+        case(1): task_1(file_name_1, file_name_2);
+            break;
+        case(2): task_2(file_name_1);
+            break;
+        case(3): task_3(file_name_1);
+            break;
+        case(4): task_4(file_name_1);
+            break;
+        }
+    } while (task);
 }
