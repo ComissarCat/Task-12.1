@@ -4,13 +4,14 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include <string>
+#include <algorithm>
 
 using namespace std;
 using namespace experimental::filesystem;
 
 void task_1(string file_name_1, string file_name_2);
 void task_2(string file_name);
-void task_3();
+void task_3(string file_name);
 void task_4();
 void create_file(string file_name);
 
@@ -24,6 +25,7 @@ int main()
     if (not exists(file)) create_file(file_name_1);
     task_1(file_name_1, file_name_2);
     task_2(file_name_1);
+    task_3(file_name_1);
 
     return 0;
 }
@@ -78,6 +80,29 @@ void task_2(string file_name)
         getline(file, bufer);
         (bufer.length() > length) ? length = bufer.length() : length;
     }
-    cout << "Длина самой длинной строки равна " << length << " символов";
+    cout << "Длина самой длинной строки равна " << length << " символов\n\n";
+    file.close();
+}
+
+void task_3(string file_name)
+{
+    ifstream file;
+    string bufer, target_word;
+    int number_of_words_if_file = 0;
+    file.open(file_name);
+    cout << "Введите искомое слово: ";
+    getline(cin, target_word);
+    transform(target_word.begin(), target_word.end(), target_word.begin(), ::tolower);
+    while (not file.eof())
+    {
+        getline(file, bufer);
+        transform(bufer.begin(), bufer.end(), bufer.begin(), ::tolower);
+        while (bufer.find(target_word) != bufer.npos)
+        {
+            ++number_of_words_if_file;
+            bufer.erase(bufer.find(target_word), target_word.length());
+        }
+    }
+    cout << target_word << " встречается в файле " << number_of_words_if_file << " раз.\n\n";
     file.close();
 }
