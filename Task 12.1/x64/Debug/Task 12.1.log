@@ -1,2 +1,3 @@
 ﻿  Task 12.1.cpp
+C:\Users\Медведев\source\repos\Task 12.1\Task 12.1\Task 12.1.cpp(79,61): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
   Task 12.1.vcxproj -> C:\Users\Медведев\source\repos\Task 12.1\x64\Debug\Task 12.1.exe

@@ -9,7 +9,7 @@ using namespace std;
 using namespace experimental::filesystem;
 
 void task_1(string file_name_1, string file_name_2);
-void task_2();
+void task_2(string file_name);
 void task_3();
 void task_4();
 void create_file(string file_name);
@@ -23,6 +23,7 @@ int main()
     path file = file_name_1;    
     if (not exists(file)) create_file(file_name_1);
     task_1(file_name_1, file_name_2);
+    task_2(file_name_1);
 
     return 0;
 }
@@ -62,4 +63,21 @@ void task_1(string file_name_1, string file_name_2)
         getline(file_1, bufer);
         file_2 << bufer << endl;
     }
+    file_1.close();
+    file_2.close();
+}
+
+void task_2(string file_name)
+{
+    ifstream file;
+    string bufer;
+    int length = 0;
+    file.open(file_name);
+    while (not file.eof())
+    {
+        getline(file, bufer);
+        (bufer.length() > length) ? length = bufer.length() : length;
+    }
+    cout << "Длина самой длинной строки равна " << length << " символов";
+    file.close();
 }
